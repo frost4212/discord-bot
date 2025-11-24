@@ -8,8 +8,25 @@ from dotenv import load_dotenv
 import json
 import random
 from collections import defaultdict
+from threading import Thread
+from flask import Flask
 
 load_dotenv()
+
+# Flask web server for keeping Replit alive
+app = Flask('')
+
+@app.route('/')
+def home():
+    return "Discord Bot is running! 🤖"
+
+def run_flask():
+    app.run(host='0.0.0.0', port=8080)
+
+def keep_alive():
+    t = Thread(target=run_flask)
+    t.daemon = True
+    t.start()
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -93,20 +110,32 @@ quotes = [
     "⚡ You've got this!"
 ]
 
-# Rank system based on points
+# Rank system based on points (harder progression)
 def get_rank(points):
-    if points < 50:
-        return "📗 Beginner"
-    elif points < 150:
-        return "📘 Student"
-    elif points < 300:
-        return "📙 Scholar"
+    if points < 100:
+        return "📗 Novice"
+    elif points < 250:
+        return "📘 Beginner"
     elif points < 500:
-        return "📕 Expert"
+        return "📙 Apprentice"
     elif points < 1000:
+        return "📕 Student"
+    elif points < 2000:
+        return "🟦 Scholar"
+    elif points < 3500:
+        return "🟧 Expert"
+    elif points < 5000:
+        return "🟪 Specialist"
+    elif points < 7500:
         return "🏆 Master"
-    else:
+    elif points < 10000:
+        return "💎 Grandmaster"
+    elif points < 15000:
         return "👑 Legend"
+    elif points < 25000:
+        return "⭐ Elite"
+    else:
+        return "🌟 Mythic"
 
 # Study partners waiting list
 study_partners = []
@@ -512,6 +541,22 @@ async def goalcheck(ctx):
     
     await ctx.send(embed=embed)
 
+# Clear Points Command
+@bot.command(name='clearpoints', help='Reset your points to zero', brief='Clear all your points')
+async def clearpoints(ctx):
+    """Reset your points to zero. Usage: !clearpoints"""
+    points = load_points()
+    user = str(ctx.author.id)
+    
+    if user not in points or points[user] == 0:
+        return await ctx.send("❌ You don't have any points to clear!")
+    
+    old_points = points[user]
+    points[user] = 0
+    save_points(points)
+    
+    await ctx.send(f"🗑️ Your points have been reset! (Lost {old_points} points)")
+
 # Help Command
 @bot.command(name='help', help='Show all available commands', brief='View command list')
 async def help(ctx):
@@ -524,7 +569,7 @@ async def help(ctx):
     
     embed.add_field(name="⏰ Timers", value="`!remindme <min>` `!pomodoro [work] [break]` `!schedule <work> <break> <cycles>`", inline=False)
     embed.add_field(name="🔥 Tracking", value="`!studied` `!streak` `!logsession <min> [subject]`", inline=False)
-    embed.add_field(name="📊 Stats", value="`!points` `!leaderboard` `!weeklyreport` `!goalcheck`", inline=False)
+    embed.add_field(name="📊 Stats", value="`!points` `!leaderboard` `!weeklyreport` `!goalcheck` `!clearpoints`", inline=False)
     embed.add_field(name="📝 To-Do", value="`!addtodo <task>` `!listtodo` `!donetodo <#>` `!cleartodo`", inline=False)
     embed.add_field(name="🎯 Goals", value="`!setgoal <daily_min>` `!goalcheck`", inline=False)
     embed.add_field(name="🤝 Social", value="`!findpartner` `!motivate`", inline=False)
@@ -823,6 +868,20 @@ async def slash_goalcheck(interaction: discord.Interaction):
     
     await interaction.response.send_message(embed=embed)
 
+@bot.tree.command(name="clearpoints", description="Reset your points to zero")
+async def slash_clearpoints(interaction: discord.Interaction):
+    points = load_points()
+    user = str(interaction.user.id)
+    
+    if user not in points or points[user] == 0:
+        return await interaction.response.send_message("❌ You don't have any points to clear!")
+    
+    old_points = points[user]
+    points[user] = 0
+    save_points(points)
+    
+    await interaction.response.send_message(f"🗑️ Your points have been reset! (Lost {old_points} points)")
+
 @bot.tree.command(name="findpartner", description="Find a study partner")
 async def slash_findpartner(interaction: discord.Interaction):
     user_id = interaction.user.id
@@ -858,4 +917,8 @@ async def slash_help(interaction: discord.Interaction):
     
     await interaction.response.send_message(embed=embed)
 
+# Start the web server to keep Replit alive
+keep_alive()
+
+# Run the bot
 bot.run(os.getenv("DISCORD_TOKEN"))

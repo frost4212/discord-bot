@@ -154,15 +154,7 @@ async def on_ready():
     try:
         guild = discord.Object(id=1442473882572292217)
         
-        # Clear ALL commands (global and guild)
-        bot.tree.clear_commands(guild=None)
-        bot.tree.clear_commands(guild=guild)
-        await bot.tree.sync(guild=None)
-        await bot.tree.sync(guild=guild)
-        print("Cleared all old commands")
-        
-        # Re-register and sync to guild only
-        bot.tree.copy_global_to(guild=guild)
+        # Sync to guild for instant appearance
         synced = await bot.tree.sync(guild=guild)
         print(f"Synced {len(synced)} slash commands to guild")
     except Exception as e:

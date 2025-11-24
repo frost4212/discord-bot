@@ -910,7 +910,7 @@ async def slash_help(interaction: discord.Interaction):
     
     embed.add_field(name="⏰ Timers", value="`/remindme` `/pomodoro`", inline=False)
     embed.add_field(name="🔥 Tracking", value="`/studied` `/streak` `/logsession`", inline=False)
-    embed.add_field(name="📊 Stats", value="`/points` `/leaderboard` `/weeklyreport` `/goalcheck`", inline=False)
+    embed.add_field(name="📊 Stats", value="`/points` `/leaderboard` `/weeklyreport` `/goalcheck` `/clearpoints`", inline=False)
     embed.add_field(name="📝 To-Do", value="`/addtodo` `/listtodo` `/donetodo` `/cleartodo`", inline=False)
     embed.add_field(name="🎯 Goals", value="`/setgoal` `/goalcheck`", inline=False)
     embed.add_field(name="🤝 Social", value="`/findpartner` `/motivate`", inline=False)

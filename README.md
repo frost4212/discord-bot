@@ -1,4 +1,3 @@
-#ReadMe writen by AI
 # Study Buddy Discord Bot 📚
 
 A feature-rich Discord bot to help students track their study sessions, maintain streaks, manage to-do lists, and stay motivated!

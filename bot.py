@@ -133,13 +133,10 @@ async def on_ready():
     if not daily_reminder.is_running():
         daily_reminder.start()
     
-    # Sync slash commands to guild for instant updates
+    # Sync slash commands
     try:
-        guild = discord.Object(id=1442473882572292217)
-        
-        # Sync to guild for instant appearance
-        synced = await bot.tree.sync(guild=guild)
-        print(f"Synced {len(synced)} slash commands to guild")
+        synced = await bot.tree.sync()
+        print(f"Synced {len(synced)} slash commands")
     except Exception as e:
         print(f"Failed to sync commands: {e}")
 

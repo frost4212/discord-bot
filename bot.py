@@ -8,25 +8,8 @@ from dotenv import load_dotenv
 import json
 import random
 from collections import defaultdict
-from threading import Thread
-from flask import Flask
 
 load_dotenv()
-
-# Flask web server for keeping Replit alive
-app = Flask('')
-
-@app.route('/')
-def home():
-    return "Discord Bot is running! 🤖"
-
-def run_flask():
-    app.run(host='0.0.0.0', port=8080)
-
-def keep_alive():
-    t = Thread(target=run_flask)
-    t.daemon = True
-    t.start()
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -919,9 +902,6 @@ async def slash_help(interaction: discord.Interaction):
     embed.add_field(name="🤝 Social", value="`/findpartner` `/motivate`", inline=False)
     
     await interaction.response.send_message(embed=embed)
-
-# Start the web server to keep Replit alive
-keep_alive()
 
 # Run the bot
 bot.run(os.getenv("DISCORD_TOKEN"))

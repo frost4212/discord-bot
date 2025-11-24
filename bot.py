@@ -152,15 +152,19 @@ async def on_ready():
     
     # Sync slash commands to guild for instant updates
     try:
-        # Clear global commands first
-        bot.tree.clear_commands(guild=None)
-        await bot.tree.sync()
-        
-        # Sync only to guild
         guild = discord.Object(id=1442473882572292217)
+        
+        # Clear ALL commands (global and guild)
+        bot.tree.clear_commands(guild=None)
+        bot.tree.clear_commands(guild=guild)
+        await bot.tree.sync(guild=None)
+        await bot.tree.sync(guild=guild)
+        print("Cleared all old commands")
+        
+        # Re-register and sync to guild only
         bot.tree.copy_global_to(guild=guild)
         synced = await bot.tree.sync(guild=guild)
-        print(f"Synced {len(synced)} slash commands to guild (instant)")
+        print(f"Synced {len(synced)} slash commands to guild")
     except Exception as e:
         print(f"Failed to sync commands: {e}")
 

@@ -120,9 +120,6 @@ def get_rank(points):
     else:
         return "🌟 Mythic"
 
-# Study partners waiting list
-study_partners = []
-
 @bot.event
 async def on_ready():
     global bot_ready
@@ -342,27 +339,7 @@ async def schedule(ctx, work_min: int, break_min: int, cycles: int):
     
     await ctx.send(f"🎉 Schedule complete! +{total_points} points earned!")
 
-# ADVANCED FEATURE 5 — Study Partner Pairing
-@bot.command(name='findpartner', help='Find a study partner', brief='Get matched with another student')
-async def findpartner(ctx):
-    """Get matched with a study partner. Usage: !findpartner"""
-    user_id = ctx.author.id
-    
-    if user_id in study_partners:
-        return await ctx.send("⏳ You're already in the queue!")
-    
-    if len(study_partners) > 0:
-        partner_id = study_partners.pop(0)
-        partner = await bot.fetch_user(partner_id)
-        
-        await ctx.send(f"🤝 Match found! {ctx.author.mention} ↔️ {partner.mention}")
-        await partner.send(f"🤝 Study partner found! You've been matched with {ctx.author.name}")
-        await ctx.author.send(f"🤝 Study partner found! You've been matched with {partner.name}")
-    else:
-        study_partners.append(user_id)
-        await ctx.send("🔍 Added to partner queue! Waiting for a match...")
-
-# ADVANCED FEATURE 6 — To-Do List System
+# ADVANCED FEATURE 5 — To-Do List System
 @bot.command(name='addtodo', help='Add a task to your to-do list', brief='Create a new task')
 async def addtodo(ctx, *, task: str):
     """Add a task to your list. Usage: !addtodo Finish chapter 5"""
@@ -555,7 +532,7 @@ async def help(ctx):
     embed.add_field(name="📊 Stats", value="`!points` `!leaderboard` `!weeklyreport` `!goalcheck` `!clearpoints`", inline=False)
     embed.add_field(name="📝 To-Do", value="`!addtodo <task>` `!listtodo` `!donetodo <#>` `!cleartodo`", inline=False)
     embed.add_field(name="🎯 Goals", value="`!setgoal <daily_min>` `!goalcheck`", inline=False)
-    embed.add_field(name="🤝 Social", value="`!findpartner` `!motivate`", inline=False)
+    embed.add_field(name="💡 Motivation", value="`!motivate`", inline=False)
     embed.add_field(name="⚙️ Settings", value="`!dailyreminder on/off`", inline=False)
     
     await ctx.send(embed=embed)
@@ -865,24 +842,6 @@ async def slash_clearpoints(interaction: discord.Interaction):
     
     await interaction.response.send_message(f"🗑️ Your points have been reset! (Lost {old_points} points)")
 
-@bot.tree.command(name="findpartner", description="Find a study partner")
-async def slash_findpartner(interaction: discord.Interaction):
-    user_id = interaction.user.id
-    
-    if user_id in study_partners:
-        return await interaction.response.send_message("⏳ You're already in the queue!")
-    
-    if len(study_partners) > 0:
-        partner_id = study_partners.pop(0)
-        partner = await bot.fetch_user(partner_id)
-        
-        await interaction.response.send_message(f"🤝 Match found! {interaction.user.mention} ↔️ {partner.mention}")
-        await partner.send(f"🤝 Study partner found! You've been matched with {interaction.user.name}")
-        await interaction.user.send(f"🤝 Study partner found! You've been matched with {partner.name}")
-    else:
-        study_partners.append(user_id)
-        await interaction.response.send_message("🔍 Added to partner queue! Waiting for a match...")
-
 @bot.tree.command(name="help", description="Show all available commands")
 async def slash_help(interaction: discord.Interaction):
     embed = discord.Embed(
@@ -896,7 +855,7 @@ async def slash_help(interaction: discord.Interaction):
     embed.add_field(name="📊 Stats", value="`/points` `/leaderboard` `/weeklyreport` `/goalcheck` `/clearpoints`", inline=False)
     embed.add_field(name="📝 To-Do", value="`/addtodo` `/listtodo` `/donetodo` `/cleartodo`", inline=False)
     embed.add_field(name="🎯 Goals", value="`/setgoal` `/goalcheck`", inline=False)
-    embed.add_field(name="🤝 Social", value="`/findpartner` `/motivate`", inline=False)
+    embed.add_field(name="💡 Motivation", value="`/motivate`", inline=False)
     
     await interaction.response.send_message(embed=embed)
 

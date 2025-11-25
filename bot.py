@@ -22,61 +22,61 @@ bot_ready = False
 # Load & save functions for streaks
 def load_streaks():
     try:
-        with open("Discord bot/streaks.json", "r") as f:
+        with open("streaks.json", "r") as f:
             return json.load(f)
     except FileNotFoundError:
         return {}
 
 def save_streaks(data):
-    with open("Discord bot/streaks.json", "w") as f:
+    with open("streaks.json", "w") as f:
         json.dump(data, f, indent=4)
 
 # Load & save functions for study points
 def load_points():
     try:
-        with open("Discord bot/points.json", "r") as f:
+        with open("points.json", "r") as f:
             return json.load(f)
     except FileNotFoundError:
         return {}
 
 def save_points(data):
-    with open("Discord bot/points.json", "w") as f:
+    with open("points.json", "w") as f:
         json.dump(data, f, indent=4)
 
 # Load & save functions for todo lists
 def load_todos():
     try:
-        with open("Discord bot/todos.json", "r") as f:
+        with open("todos.json", "r") as f:
             return json.load(f)
     except FileNotFoundError:
         return {}
 
 def save_todos(data):
-    with open("Discord bot/todos.json", "w") as f:
+    with open("todos.json", "w") as f:
         json.dump(data, f, indent=4)
 
 # Load & save functions for study sessions
 def load_sessions():
     try:
-        with open("Discord bot/sessions.json", "r") as f:
+        with open("sessions.json", "r") as f:
             return json.load(f)
     except FileNotFoundError:
         return {}
 
 def save_sessions(data):
-    with open("Discord bot/sessions.json", "w") as f:
+    with open("sessions.json", "w") as f:
         json.dump(data, f, indent=4)
 
 # Load & save functions for daily reminders
 def load_reminders():
     try:
-        with open("Discord bot/reminders.json", "r") as f:
+        with open("reminders.json", "r") as f:
             return json.load(f)
     except FileNotFoundError:
         return {}
 
 def save_reminders(data):
-    with open("Discord bot/reminders.json", "w") as f:
+    with open("reminders.json", "w") as f:
         json.dump(data, f, indent=4)
 
 # Motivation quotes
